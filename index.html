@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GameZone</title>
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #17152e;
+  color: white;
+  padding: 20px;
+}
+h1 { color: #ffd43b; }
+button {
+  padding: 13px;
+  margin: 7px;
+  border: 0;
+  border-radius: 10px;
+  background: #7655ee;
+  color: white;
+  font-size: 17px;
+}
+.game {
+  background: #29264b;
+  padding: 18px;
+  margin: 18px auto;
+  border-radius: 15px;
+  max-width: 400px;
+}
+</style>
+</head>
+<body>
+
+<h1>🎮 GAMEZONE</h1>
+<p>Oyun dünyasına hoş geldin!</p>
+
+<div class="game">
+<h2>✊ Taş Kağıt Makas</h2>
+<button onclick="rps('Taş')">Taş</button>
+<button onclick="rps('Kağıt')">Kağıt</button>
+<button onclick="rps('Makas')">Makas</button>
+<p id="result"></p>
+</div>
+
+<div class="game">
+<h2>🔢 Sayıyı Tahmin Et</h2>
+<p>1 ile 20 arasında bir sayı tuttum!</p>
+<input id="guess" type="number" min="1" max="20">
+<button onclick="check()">Tahmin et</button>
+<p id="hint"></p>
+</div>
+
+<div class="game">
+<h2>⚡ Tıklama Yarışı</h2>
+<p id="score">Puan: 0</p>
+<button onclick="clickGame()">TIKLA!</button>
+<button onclick="startGame()">Başlat</button>
+<p id="timer">10 saniye</p>
+</div>
+
+<script>
+function rps(user) {
+ const choices = ["Taş","Kağıt","Makas"];
+ const pc = choices[Math.floor(Math.random()*3)];
+ let answer = user === pc ? "Berabere!" :
+ (user==="Taş"&&pc==="Makas" ||
+ user==="Kağıt"&&pc==="Taş" ||
+ user==="Makas"&&pc==="Kağıt") ? "Kazandın!" : "Bilgisayar kazandı!";
+ document.getElementById("result").textContent =
+ "Sen: "+user+" | Bilgisayar: "+pc+" — "+answer;
+}
+
+let number = Math.floor(Math.random()*20)+1;
+function check() {
+ let g = Number(document.getElementById("guess").value);
+ let h = document.getElementById("hint");
+ if(g===number) {
+  h.textContent="🎉 Bildin! Yeni sayı tuttum.";
+  number=Math.floor(Math.random()*20)+1;
+ } else if(g<number) h.textContent="Daha büyük!";
+ else h.textContent="Daha küçük!";
+}
+
+let score=0, time=10, playing=false, interval;
+function startGame() {
+ clearInterval(interval);
+ score=0; time=10; playing=true;
+ document.getElementById("score").textContent="Puan: 0";
+ document.getElementById("timer").textContent="10 saniye";
+ interval=setInterval(()=>{
+  time--;
+  document.getElementById("timer").textContent=time+" saniye";
+  if(time<=0) {
+   clearInterval(interval);
+   playing=false;
+   document.getElementById("timer").textContent="Bitti! 🎉";
+  }
+ },1000);
+}
+function clickGame() {
+ if(!playing) return;
+ score++;
+ document.getElementById("score").textContent="Puan: "+score;
+}
+</script>
+
+</body>
+</html>
